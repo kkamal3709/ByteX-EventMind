@@ -1,8 +1,13 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 import sqlite3
 import os
 from groq import Groq
+
+FRONTEND_FOLDER = os.path.join(
+    os.path.dirname(os.path.dirname(__file__)),
+    "frontend"
+)
 
 app = Flask(__name__)
 CORS(app)
@@ -70,10 +75,12 @@ def init_db():
 
 @app.route("/")
 def home():
-    return jsonify({
-        "team": "ByteX",
-        "status": "Backend is running!"
-    })
+    return send_from_directory(FRONTEND_FOLDER, "index.html")
+
+
+@app.route("/<path:filename>")
+def frontend_files(filename):
+    return send_from_directory(FRONTEND_FOLDER, filename)
 
 
 @app.route("/api/health")
