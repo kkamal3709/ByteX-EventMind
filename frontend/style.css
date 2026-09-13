@@ -1,3 +1,10 @@
+@font-face {
+    font-family: "Ethnocentric";
+    src: url("ethnocentric rg.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
