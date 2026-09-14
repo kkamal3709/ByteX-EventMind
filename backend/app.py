@@ -714,6 +714,29 @@ def database_test():
     })
 
 
+@app.route("/api/history", methods=["GET"])
+def history():
+    admin_key = request.headers.get("X-Admin-Key")
+
+    if admin_key != os.getenv("ADMIN_HISTORY_KEY"):
+        return jsonify({"error": "Unauthorized"}), 401
+
+    connection = get_db()
+
+    rows = connection.execute("""
+        SELECT id, task, agent_name, result, status, created_at
+        FROM agent_runs
+        ORDER BY id DESC
+    """).fetchall()
+
+    connection.close()
+
+    return jsonify({
+        "count": len(rows),
+        "records": [dict(row) for row in rows]
+    })
+
+
 init_db()
 
 if __name__ == "__main__":
